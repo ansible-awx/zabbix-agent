@@ -4,6 +4,6 @@
 - hosts: all
   user: root
   vars_files:
-  - vars/zabbix_main.yml
+  - vars/zabbix_variables.yml
   tasks:
-  - include: tasks/zabbix_install_v4.yml
+  - include: tasks/install_tasks.yml

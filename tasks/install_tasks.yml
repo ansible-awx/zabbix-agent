@@ -26,15 +26,24 @@
     name: 'zabbix-agent'
     state: present
 
-- name: Install zabbix sudoer entries into /etc/sudoers.d
-  copy:
-    src: templates/zabbix_sudoers
+- template: Install zabbix sudoer entries into /etc/sudoers.d
+    src: templates/zabbix_sudoers.j2
     dest: /etc/sudoers.d/zabbix
+    owner: root
+    group: root
+    mode: 0644
 
-- name: Copy zabbix agent entries into temporary agent file
-  copy:
-   src: templates/zabbix_agentd.conf
-   dest: /etc/zabbix/zabbix_agentd.conf
+- template: Install zabbix agent config file into /etc/zabbix
+    src: templates/zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+    owner: root
+    group: root
+    mode: 0644
+
+#- name: Copy zabbix agent entries into temporary agent file
+#  copy:
+#   src: templates/zabbix_agentd.conf
+#   dest: /etc/zabbix/zabbix_agentd.conf
 
 - name:
   service: name=zabbix-agent state=restarted
