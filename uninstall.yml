@@ -3,7 +3,7 @@
 
 - hosts: all
   vars_files:
-  - vars/zabbix_main.yml
+  - vars/zabbix_variables.yml
   tasks:
   - include: tasks/remove.yml
 
