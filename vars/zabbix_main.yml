@@ -1,0 +1,10 @@
+---
+# Variables/ settings specific to Zabbix
+# #
+# ## THIS FILE IS TEST MODE
+# #
+#
+is_dev: "'zabbix-dev' in $group_names"
+is_stage: "'zabbix-stage' in $group_names"
+is_prod: "'zabbix-prod' in $group_names"
+

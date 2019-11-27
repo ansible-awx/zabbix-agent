@@ -1,0 +1,37 @@
+---
+### Make the required changes to the sudoers file for the wheel group and
+### the scomsvc user
+#
+
+- name: Change the owner of the tmp dir to root.root and permissions to 1777
+  action: shell cd /; chmod 1777 tmp
+
+- name: Add the zabbix user
+  user: name=zabbix uid=1502 comment="zabbix user" password=$6$EmAz6jSq$tqYiids6x0CrCH8sD5Bo5qpDD8Ve4JeL.7yWZkoyPUF9sOLERHG72wA5A3o/vAaADI0DitdBInw/FSnv5DVuH1
+
+- name: Copy zabbix sudoer entries into temporary sudoers file
+  action: template src=/etc/ansible/zabbix/templates/zabbix_sudoers dest=/tmp/sudoers.zabbix
+
+- name: Concatenate sudoers.zabbix to /etc/sudoers
+  action: shell cat /tmp/sudoers.zabbix >> /etc/sudoers
+
+- name: Copy zabbix agent entries into temporary agent file
+  action: template src=/etc/ansible/zabbix/templates/zabbix_agentd.conf dest=/tmp/zabbix_agentd.conf
+
+- name: Bring over the zabbix agent for install
+  action: copy src=/etc/ansible/zabbix/rpms/zabbix-agent-2.2.2-1.el6.x86_64.rpm dest=/tmp/zabbix-agent-2.2.2-1.el6.x86_64.rpm
+
+- name: Bring over the zabbix dependancy package for install
+  action: copy src=/etc/ansible/zabbix/rpms/zabbix-2.2.2-1.el6.x86_64.rpm dest=/tmp/zabbix-2.2.2-1.el6.x86_64.rpm
+
+- name: Install the zabbix agent and remove default conf file in /etc/zabbix
+  action: shell cd /tmp; rpm -ivh zabbix-*.rpm; rm -f /etc/zabbix/zabbix_agentd.conf
+
+- name: Copy config file to /etc/zabbix
+  action: shell cp /tmp/zabbix_agentd.conf /etc/zabbix/
+
+- name: start the zabbix-agent service
+  action: shell service zabbix-agent restart
+
+- name: Delete the files in /tmp directory
+  action: shell cd /tmp; rm -f zabbix*.rpm zabbix_agentd.conf sudoers.zabbix

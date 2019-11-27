@@ -1,0 +1,9 @@
+---
+### Playbook for Zabbix Installs
+
+- hosts: all
+  user: root
+  vars_files:
+  - vars/zabbix_main.yml
+  tasks:
+  - include: tasks/zabbix_install_v4.yml

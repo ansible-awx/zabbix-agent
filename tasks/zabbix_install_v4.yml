@@ -1,0 +1,44 @@
+---
+### Make the required changes to the sudoers file for the wheel group and
+### the scomsvc user
+#
+
+- name: Change the owner of the tmp dir to root.root and permissions to 1777
+  action: shell cd /; chmod 1777 tmp
+
+- name: Bring over the zabbix-release-4.4-1.el7.noarch.rpm into /tmp
+  action: copy src=rpms/zabbix-release-4.4-1.el7.noarch.rpm dest=/tmp/zabbix-release-4.4-1.el7.noarch.rpm
+
+
+- name: Install the zabbix agent and remove default conf file in /etc/zabbix
+  action: shell cd /tmp; rpm -ivh zabbix-release-4.4-1.el7.noarch.rpm; rm -f /etc/zabbix/zabbix_agentd.conf
+
+- name: "Do a yum clean"
+  shell: yum clean all
+  args:
+    warn: False
+
+- debug:
+    msg: "yum install zabbix-agent on server {{ ansible_hostname }} "
+
+- name: Perform yum update of all packages
+  yum:
+    name: 'zabbix-agent'
+    state: present
+
+- name: Install zabbix sudoer entries into /etc/sudoers.d
+  copy:
+    src: templates/zabbix_sudoers
+    dest: /etc/sudoers.d/zabbix
+
+- name: Copy zabbix agent entries into temporary agent file
+  copy:
+   src: templates/zabbix_agentd.conf
+   dest: /etc/zabbix/zabbix_agentd.conf
+
+- name:
+  service: name=zabbix-agent state=restarted
+
+- name: Delete the files in /tmp directory
+  action: shell cd /tmp; rm -f zabbix*.rpm 
+

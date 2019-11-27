@@ -1,0 +1,11 @@
+#----------------------------------------------------------------------------------
+#User configuration for zabbix agent for a user with the name: zabbix
+#General requirements
+Defaults:zabbix !requiretty
+
+#Agent maintenance (discovery, install, uninstall, upgrade, restart, cert signing)
+# allows 'zabbix' user to run all commands without password.
+zabbix ALL=NOPASSWD: ALL
+
+#End user configuration for Zabbix agent
+#-------------------------------------------------------
