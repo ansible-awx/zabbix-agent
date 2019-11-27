@@ -42,12 +42,6 @@
       group: root
       mode: 0644
 
-
-#- name: Copy zabbix agent entries into temporary agent file
-#  copy:
-#   src: templates/zabbix_agentd.conf
-#   dest: /etc/zabbix/zabbix_agentd.conf
-
 - name:
   service: name=zabbix-agent state=restarted
 
