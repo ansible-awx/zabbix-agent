@@ -7,3 +7,17 @@
   - vars/zabbix_variables.yml
   tasks:
   - include: tasks/install_tasks.yml
+  - template: Install zabbix sudoer entries into /etc/sudoers.d
+      src: templates/zabbix_sudoers.j2
+      dest: /etc/sudoers.d/zabbix
+      owner: root
+      group: root
+      mode: 0644
+  
+  - template: Install zabbix agent config file into /etc/zabbix
+      src: templates/zabbix_agentd.conf.j2
+      dest: /etc/zabbix/zabbix_agentd.conf
+      owner: root
+      group: root
+      mode: 0644
+
