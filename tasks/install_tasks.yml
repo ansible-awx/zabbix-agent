@@ -41,10 +41,8 @@
       owner: root
       group: root
       mode: 0644
-
-- name:
-  service: name=zabbix-agent state=restarted
-
+  notify: handler_restart_zabbix_agentd
+  
 - name: Delete the files in /tmp directory
   action: shell cd /tmp; rm -f zabbix*.rpm 
 

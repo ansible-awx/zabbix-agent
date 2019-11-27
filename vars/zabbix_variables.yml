@@ -11,3 +11,13 @@ zabbix_server01: 192.168.1.111
 zabbix_server02: 192.168.1.112
 zabbix_agent_user: zabbix
 
+#
+bad_packages:
+- tftp-server
+- telnet-server
+
+add_packages:
+- net-tools
+- coreutils
+
+

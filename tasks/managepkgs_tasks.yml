@@ -1,0 +1,11 @@
+- name: remove some packages
+  yum:
+    name: "{{bad_packages}}"
+    state: absent
+  check_mode: yes
+
+
+- name: add some packages
+  yum:
+    name: "{{add_packages}}"
+    state: latest
